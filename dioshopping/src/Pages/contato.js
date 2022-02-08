@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Grid, Button, TextField } from '@material-ui/core/';
+import { toast } from 'react-toastify';
 
 const Contatos = () => {
 
@@ -9,7 +10,7 @@ const Contatos = () => {
     const [content, setContent] = useState('');
     const [validator, setValidator] = useState(false);
     const [render, setRender] = useState(false);
-    const [success, setSuccess] = useState(false);
+
 
     useEffect(async () => {
         const response = await fetch(url)
@@ -38,12 +39,11 @@ const Contatos = () => {
         .then((data) => {
             if(data.id) {
                 setRender(true);
-                setSuccess(true);
-                setTimeout(() => {
-                    setSuccess(false);
-                }, 5000)
+                toast.info('Avaliação postada com sucesso!');
             }
-        })
+        }).catch(() => {
+            toast.error('Erro ao salvar avaliação');
+          });
         
         setAuthor('');
         setContent('');
@@ -62,12 +62,6 @@ const Contatos = () => {
                 <div className="alert alert-warning alert-dismissible fade show mt-2" role="alert">
                     <strong>Por favor preencha todos os campos!</strong>
                     <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
-
-            {success && 
-                <div className="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                    <strong>Mensagem foi enviada</strong>
                 </div>
             }
 
